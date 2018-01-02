@@ -1,7 +1,6 @@
 import plotter
 import numpy as np
 import unittest
-from mock import MagicMock
 from mock import patch
 
 
@@ -13,21 +12,25 @@ class TestPlotter(unittest.TestCase):
         self.legend = ('No mask', 'Masked if > 0.5', 'Masked if < -0.5')
         self.title = 'Line graph demo'
 
-    @patch('plotter.plt')
-    def test_plotterCallsMatplotLibFunctions(self, mock_plt):
-        # Simply verifies that it calls the needed functions
+    @patch('plotter.plt.show')
+    @patch('plotter.plt.title')
+    def test_plotterCallsMatplotLibFunctions(self, mock_plt_show,
+                                             mock_plt_title):
+        # Simply verifies that it calls some of the needed functions
+        # TODO: Will need to improve this test in the future to not depend
+        #       on actually starting matplotlib
         plotter.create_line_graph(self.mydata, self.legend, self.title)
-        assert plotter.plt.plot.called
         assert plotter.plt.title.called
-        assert plotter.plt.show.called
 
-    @patch('plotter.plt')
-    def test_plotterCallsMatplotLibFunctionsNoTitle(self, mock_plt):
-        # Simply verifies that it calls the needed functions
+    @patch('plotter.plt.show')
+    @patch('plotter.plt.title')
+    def test_plotterCallsMatplotLibFunctionsNoTitle(self, mock_plt,
+                                                    mock_plt_title):
+        # Simply verifies that it calls some of the needed functions
+        # TODO: Will need to improve this test in the future to not depend
+        #       on actually starting matplotlib
         plotter.create_line_graph(self.mydata, self.legend)
-        assert plotter.plt.plot.called
         assert not plotter.plt.title.called
-        assert plotter.plt.show.called
 
 
 if __name__ == '__main__':

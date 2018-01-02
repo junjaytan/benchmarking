@@ -158,7 +158,11 @@ class DstatResults(object):
         for cat in self.results:
             for subcat in self.results[cat]:
                 col_idx = self._results_column_map.mappings[cat][subcat]
-                self.results[cat][subcat].append(data_row[col_idx])
+                try:
+                    cur_value = float(data_row[col_idx])
+                except ValueError:
+                    cur_value = data_row[col_idx]
+                self.results[cat][subcat].append(cur_value)
 
     def _starting_row_to_ignore(self, row):
         """Determines if row contains data or contains headers metadata
