@@ -27,6 +27,12 @@ FROM SVL_QUERY_METRICS_SUMMARY sqms JOIN svl_qlog sq ON sqms.query=sq.query
 WHERE sq.label like '%YOUR_LABEL%' AND sq.userid=100
 order by starttime desc;
 
+-- Query metrics
+select sq.label, sqm.starttime, segment, step_type, slices, max_rows, rows, max_cpu_time, cpu_time, max_blocks_read, 
+blocks_read, max_run_time, run_time, query_scan_size, max_query_scan_size, max_blocks_to_disk, blocks_to_disk
+FROM STL_QUERY_METRICS sqm INNER JOIN svl_qlog sq ON sqm.query=sq.query
+WHERE sq.label like '%YOUR_LABEL%' AND sq.userid=100
+order by starttime desc;
 
  --Sum S3 traffic by query (if running Redshift Spectrum)
 select sq.query, sq.label, SUM(s3_scanned_bytes)/1000000 AS s3_scanned_mb, SUM(s3query_returned_rows) as s3query_returned_rows, SUM(s3query_returned_bytes)/1000000 as s3query_returned_bytes_mb
