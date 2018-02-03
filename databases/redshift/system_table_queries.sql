@@ -27,7 +27,14 @@ FROM SVL_QUERY_METRICS_SUMMARY sqms JOIN svl_qlog sq ON sqms.query=sq.query
 WHERE sq.label like '%YOUR_LABEL%' AND sq.userid=100
 order by starttime desc;
 
--- Query metrics
+-- SVL Query Metrics
+-- This seems to have more detailed cpu and i/o values than the stl table below.
+select sq.label, sq.starttime, step_label,dimension, query_cpu_time, query_blocks_read, query_cpu_usage_percent, query_temp_blocks_to_disk, cpu_skew, io_skew, scan_row_count, join_row_count, return_row_count, spectrum_scan_row_count, spectrum_scan_size_mb
+FROM SVL_QUERY_METRICS sqm INNER JOIN svl_qlog sq ON sqm.query=sq.query
+WHERE sq.label like '%YOUR_LABEL%' AND sq.userid=100
+order by starttime desc;
+
+-- STL Query Metrics
 select sq.label, sqm.starttime, segment, step_type, slices, max_rows, rows, max_cpu_time, cpu_time, max_blocks_read, 
 blocks_read, max_run_time, run_time, query_scan_size, max_query_scan_size, max_blocks_to_disk, blocks_to_disk
 FROM STL_QUERY_METRICS sqm INNER JOIN svl_qlog sq ON sqm.query=sq.query
